@@ -1,9 +1,15 @@
 // api/auth/login.js
-export default function handler(req, res) {
-  const clientId = process.env.WHOP_CLIENT_ID;
-  const redirectUri = encodeURIComponent(process.env.WHOP_REDIRECT_URI);
-  const scope = encodeURIComponent("read"); // ajusta scopes
-  const url = `https://whop.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
-  res.writeHead(302, { Location: url });
-  res.end();
+
+export default async function handler(req, res) {
+  const { WHOP_CLIENT_ID, WHOP_REDIRECT_URI } = process.env;
+
+  if (!WHOP_CLIENT_ID || !WHOP_REDIRECT_URI) {
+    return res.status(500).json({ error: "Missing environment variables" });
+  }
+
+  const whopAuthUrl = `https://whop.com/oauth?client_id=${WHOP_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    WHOP_REDIRECT_URI
+  )}&response_type=code&scope=identity%20email`;
+
+  return res.redirect(302, whopAuthUrl);
 }
