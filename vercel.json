@@ -4,6 +4,15 @@
     { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" }
+    { "src": "^/api/(.*)$", "dest": "/api/$1.js" },
+
+    { "src": "^/login$", "dest": "/api/auth/login.js" },
+    { "src": "^/callback$", "dest": "/api/auth/callback.js" },
+
+    { "src": "^/memberships$", "dest": "/api/whop/memberships.js" },
+    { "src": "^/products$", "dest": "/api/whop/products.js" },
+    
+    { "src": "^/webhooks$", "dest": "/api/webhooks.js" }
+
   ]
 }
